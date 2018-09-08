@@ -8,6 +8,7 @@ for i in cyti_list_row:
 
 my_cyti = input("Введите первое название города _____ ")
 my_cyti = my_cyti.upper()
+
 while True:
 
 
@@ -51,7 +52,7 @@ while True:
         while x < 1:
             my_cyti = input('Введите город_____')
             my_cyti = my_cyti.upper()
-            if my_cyti[0] == comp_answer [-1]:
+            if my_cyti[0] == comp_answer[-1]:
 
                 if my_cyti + '1' in cyti_list:
                     print('Такой город был')
