@@ -1,19 +1,34 @@
-from tkinter import *
+from PyQt5 import QtWidgets
+from city import Ui_MainWindow
+import sys
+from game_cyti import *
 
 
-def clicked():
-    if txt.get():
-        print(txt.get())
+class window(QtWidgets.QMainWindow):
+    def __init__(self):
+        super(window, self).__init__()
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+        self.ui.pushButton.clicked.connect(self.btnClicked)
+
+    def btnClicked(self):
+        if self.ui.comp_city.text():
+            last_letter = self.ui.comp_city.text()[-1]
+        else:
+            last_letter = ''
+        res = check(city_list, self.ui.my_city.text().upper(), last_letter)
+        self.ui.hint.setText(res['string'])
+        if res['comp_city']:
+            self.ui.comp_city.setText(res['comp_city'])
+            self.ui.my_city.setText('')
+        else:
+            self.ui.my_city.setText('')
 
 
-window = Tk()
-window.geometry('500x500')
-window.title("Добро пожаловать в Города!")
-lbl = Label(window, text="Введите Ваш город", font=("Arial Bold", 18))
-lbl.grid(column=0, row=0)
-txt = Entry(window, width=50)
-txt.grid(column=0, row=1)
-bt = Button(window, text='Ответить', bg='#b2b2b2', fg="white", font=('Arial Bold', 15),
-            width=10, command=clicked)
-bt.grid(column=0, row=2)
-window.mainloop()
+app = QtWidgets.QApplication([])
+application = window()
+application.show()
+city_list = read()
+
+
+sys.exit(app.exec())
