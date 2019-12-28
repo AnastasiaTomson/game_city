@@ -1,77 +1,41 @@
 import random
-my_file = open('cyti3.txt', 'r')
-cyti_list_row = my_file.readlines()
+my_file = open('city.txt', 'r', encoding='cp1251')
 
-cyti_list = []
-for i in cyti_list_row:
-    cyti_list.append(i.upper()[0:-1])
+city_list = []
+already_been = []
+last_letter = ''
+for i in my_file.readlines():
+    city_list.append(i.upper()[0:-1])
 
-my_cyti = input("Введите первое название города _____ ")
-my_cyti = my_cyti.upper()
+
+def computer_response(letter):
+    res = [comp_city for comp_city in city_list if comp_city[0].upper() == letter]
+    if res:
+        answer = random.choice(res)
+        computer_answer = 'Ответ компьютера {} \n Последняя буква: {}'.format(answer, answer[-1])
+        kwarg = {'string': computer_answer, 'last_letter': answer[-1]}
+        return kwarg
+    else:
+        print('Городов на букву {} больше нет. Вы выиграли!'.format(letter))
+        exit()
+
 
 while True:
-
-
-        if my_cyti in cyti_list:
-
-            print('Такой город есть. Последняя буква:', my_cyti[-1])
-            my_cyti_index = cyti_list.index(my_cyti)
-            cyti_list.remove(my_cyti)
-            cyti_list.insert(my_cyti_index, my_cyti + '1')
-
-
+    my_city = input("Введите название города _____ ").upper()
+    if last_letter == my_city[0] or last_letter == '':
+        if my_city in city_list:
+            last_letter = my_city[-1]
+            print('Такой город есть. Последняя буква:', last_letter)
+            city_list.remove(my_city)
+            already_been.append(my_city)
+            dict_computer = computer_response(last_letter)
+            print(dict_computer['string'])
+            if len(dict_computer) == 2:
+                last_letter = dict_computer['last_letter']
         else:
-            print('Такого города нет.')
-            my_cyti = input('Введите название города _____')
-            my_cyti = my_cyti.upper()
-            continue
-
-
-        comp_cyti_list = []
-        for i in cyti_list:
-            if i[0] == my_cyti[-1] and i[-1] != '1':
-                comp_cyti_list.append(i)
-            elif i[0] != my_cyti[-1]:
-                continue
-            elif i[0] == my_cyti[-1] and i[-1] == '1':
-                continue
-        try:
-            comp_answer = random.choice(comp_cyti_list)
-        except IndexError:
-            print('Городов на букву', my_cyti[-1], 'больше нет. Вы выиграли!')
-            break
-        print('Ответ компьютера', comp_answer, '\n', 'Последняя буква:', comp_answer[-1])
-        comp_answer_index = cyti_list.index(comp_answer)
-        cyti_list.remove(comp_answer)
-        cyti_list.insert(comp_answer_index, comp_answer + '1')
-
-
-
-
-        x = 0
-        while x < 1:
-            my_cyti = input('Введите город_____')
-            my_cyti = my_cyti.upper()
-            if my_cyti[0] == comp_answer[-1]:
-
-                if my_cyti + '1' in cyti_list:
-                    print('Такой город был')
-
-                else:
-                    x += 2
+            if my_city in already_been:
+                print('Такой город был! Попробуйте еще раз.')
             else:
-                print('Введите город на букву:', comp_answer[-1])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                print('Такого города нет.')
+    else:
+        print('Нужно ввести город на букву {}'.format(last_letter))
